@@ -25,7 +25,8 @@ DNS: `demo.galascribe.com` is a `CNAME` to `rathnasdemo.github.io` in Cloudflare
 |---|---|
 | `CNAME` | `demo.galascribe.com`, the domain for every demo site |
 | `robots.txt` | `Disallow: /`, keeps all demo sites out of search engines |
-| `index.html` | The page at `https://demo.galascribe.com/` (no index, links to galascribe.com) |
+| `index.html` | The landing page at `https://demo.galascribe.com/`: one self-contained file (inline CSS, no scripts), `noindex`, in the Galascribe App's design tokens, light and dark |
+| `favicon.svg` | The Galascribe "G" mark, a copy of the App's `public/favicon.svg`; the page's icon and header logo |
 | `.nojekyll` | Serves the files as they are, without a Jekyll build |
 
 ## Before changing anything

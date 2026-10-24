@@ -3,12 +3,643 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0d11" media="(prefers-color-scheme: dark)">
 <title>Galascribe demo sites</title>
+<meta name="description" content="Preview sites built by Galascribe for creators. Each site turns a creator's own videos into written articles, every article linking back to the video.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/*
+ * Design tokens: the Galascribe App's own (app/src/app/theme/tailwind.css) - the cool gray ramp,
+ * the single indigo accent, the 6 / 10 / 16 px radii, the two elevation levels, the system font
+ * stack (the App loads no web font) and the 4 px spacing grid. Light by default; dark follows the
+ * visitor's system setting.
+ */
+:root {
+  color-scheme: light dark;
+
+  --gala-gray-0: #ffffff;
+  --gala-gray-50: #f7f8fa;
+  --gala-gray-100: #eff1f5;
+  --gala-gray-200: #e3e6ec;
+  --gala-gray-300: #d2d7e0;
+  --gala-gray-400: #aeb5c2;
+  --gala-gray-500: #868e9c;
+  --gala-gray-600: #5f6779;
+  --gala-gray-800: #2f3643;
+  --gala-gray-850: #262c37;
+  --gala-gray-900: #1e232c;
+  --gala-gray-950: #14171d;
+  --gala-gray-1000: #0b0d11;
+
+  --gala-accent-50: #eef2ff;
+  --gala-accent-200: #c7d2fe;
+  --gala-accent-300: #a5b4fc;
+  --gala-accent-600: #4f46e5;
+  --gala-accent-700: #4338ca;
+  --gala-accent-950: #1f2547;
+
+  --gala-radius-sm: 0.375rem;
+  --gala-radius-md: 0.625rem;
+  --gala-radius-lg: 1rem;
+  --gala-radius-full: 999px;
+
+  --gala-font-size-display: 2.25rem;
+  --gala-font-size-h2: 1.3125rem;
+  --gala-font-size-h3: 1.0625rem;
+  --gala-font-size-small: 0.8125rem;
+  --gala-line-height-display: 1.15;
+  --gala-line-height-heading: 1.25;
+  --gala-line-height-body: 1.55;
+  --gala-tracking-display: -0.02em;
+  --gala-tracking-heading: -0.01em;
+  --gala-tracking-label: 0.04em;
+  --gala-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --gala-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+  --gala-container: 72rem;
+  --gala-container-prose: 44rem;
+  --gala-duration-normal: 180ms;
+  --gala-easing-standard: cubic-bezier(0.2, 0, 0.1, 1);
+
+  /* Semantic aliases, light */
+  --gala-color-bg: var(--gala-gray-50);
+  --gala-color-surface: var(--gala-gray-0);
+  --gala-color-surface-subtle: var(--gala-gray-100);
+  --gala-color-border: var(--gala-gray-200);
+  --gala-color-border-strong: var(--gala-gray-600);
+  --gala-color-text: var(--gala-gray-900);
+  --gala-color-text-muted: var(--gala-gray-600);
+  --gala-color-text-on-accent: var(--gala-gray-0);
+  --gala-color-accent: var(--gala-accent-600);
+  --gala-color-accent-hover: var(--gala-accent-700);
+  --gala-color-accent-subtle: var(--gala-accent-50);
+  --gala-color-focus-ring: var(--gala-accent-600);
+  --gala-shadow-raised: 0 1px 2px rgba(11, 13, 17, 0.06), 0 1px 3px rgba(11, 13, 17, 0.08);
+  --gala-shadow-overlay: 0 4px 6px rgba(11, 13, 17, 0.06), 0 12px 28px rgba(11, 13, 17, 0.18);
+  --gala-mark-ring: 0 0 0 1px var(--gala-gray-300);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gala-color-bg: var(--gala-gray-1000);
+    --gala-color-surface: var(--gala-gray-950);
+    --gala-color-surface-subtle: var(--gala-gray-850);
+    --gala-color-border: var(--gala-gray-800);
+    --gala-color-border-strong: var(--gala-gray-500);
+    --gala-color-text: var(--gala-gray-50);
+    --gala-color-text-muted: var(--gala-gray-400);
+    --gala-color-text-on-accent: var(--gala-gray-1000);
+    --gala-color-accent: var(--gala-accent-300);
+    --gala-color-accent-hover: var(--gala-accent-200);
+    --gala-color-accent-subtle: var(--gala-accent-950);
+    --gala-color-focus-ring: var(--gala-accent-300);
+    --gala-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --gala-shadow-overlay: 0 4px 8px rgba(0, 0, 0, 0.5), 0 16px 32px rgba(0, 0, 0, 0.6);
+    --gala-mark-ring: 0 0 0 1px var(--gala-gray-800);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--gala-color-bg);
+  color: var(--gala-color-text);
+  font-family: var(--gala-font-family);
+  font-size: 1rem;
+  line-height: var(--gala-line-height-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+
+main { flex: 1 0 auto; }
+
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--gala-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--gala-radius-sm);
+}
+
+.wrap {
+  width: min(100% - 2rem, var(--gala-container));
+  margin-inline: auto;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-sm { width: 1rem; height: 1rem; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- header ---------- */
+.site-header { padding-block: 0.75rem; }
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 44px;
+  text-decoration: none;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  letter-spacing: var(--gala-tracking-heading);
+}
+.brand img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--gala-radius-md);
+  box-shadow: var(--gala-mark-ring);
+}
+
+.header-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: 0.75rem;
+  border-radius: var(--gala-radius-md);
+  color: var(--gala-color-text-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--gala-duration-normal) var(--gala-easing-standard),
+    background-color var(--gala-duration-normal) var(--gala-easing-standard);
+}
+.header-link:hover { color: var(--gala-color-text); background: var(--gala-color-surface-subtle); }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 2rem 3rem; }
+.hero .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+}
+.hero .wrap > * { min-width: 0; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3125rem 0.75rem;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-full);
+  background: var(--gala-color-accent-subtle);
+  color: var(--gala-color-accent);
+  font-size: var(--gala-font-size-small);
+  font-weight: 600;
+  letter-spacing: var(--gala-tracking-label);
+}
+
+h1 {
+  margin-top: 1.25rem;
+  font-size: clamp(var(--gala-font-size-display), 1.55rem + 3.1vw, 3.5rem);
+  line-height: var(--gala-line-height-display);
+  letter-spacing: var(--gala-tracking-display);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.lead {
+  margin-top: 1.25rem;
+  max-width: 36rem;
+  color: var(--gala-color-text-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  min-width: 44px;
+  max-width: 100%;
+  padding: 0.5rem 1.125rem;
+  border: 1px solid transparent;
+  border-radius: var(--gala-radius-md);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 650;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--gala-duration-normal) var(--gala-easing-standard),
+    border-color var(--gala-duration-normal) var(--gala-easing-standard),
+    color var(--gala-duration-normal) var(--gala-easing-standard);
+}
+.btn-primary {
+  background: var(--gala-color-accent);
+  color: var(--gala-color-text-on-accent);
+  box-shadow: var(--gala-shadow-raised);
+}
+.btn-primary:hover { background: var(--gala-color-accent-hover); }
+.btn-secondary {
+  background: var(--gala-color-surface);
+  border-color: var(--gala-color-border-strong);
+  color: var(--gala-color-text);
+}
+.btn-secondary:hover { border-color: var(--gala-color-accent); color: var(--gala-color-accent); }
+
+/* The product, drawn: a preview site's page in a browser frame. Decorative. */
+.glimpse { position: relative; width: 100%; max-width: 38rem; margin-inline: auto; }
+.glimpse::before {
+  content: "";
+  position: absolute;
+  inset: -1.5rem -1rem;
+  z-index: -1;
+  border-radius: 2rem;
+  background: radial-gradient(closest-side, var(--gala-color-accent-subtle), transparent);
+  opacity: 0.9;
+}
+.frame {
+  overflow: hidden;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-lg);
+  background: var(--gala-color-surface);
+  box-shadow: var(--gala-shadow-overlay);
+}
+.frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--gala-color-border);
+  background: var(--gala-color-surface-subtle);
+}
+.dot { width: 0.625rem; height: 0.625rem; flex: none; border-radius: 50%; background: var(--gala-color-border-strong); opacity: 0.55; }
+.address {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+  margin-left: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-full);
+  background: var(--gala-color-surface);
+  color: var(--gala-color-text-muted);
+  font: 0.75rem/1.4 var(--gala-font-family-mono);
+}
+.address span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.frame-body { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; }
+.frame-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; color: var(--gala-color-text-muted); font-size: var(--gala-font-size-small); }
+.frame-meta .chip {
+  display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.125rem 0.625rem;
+  border-radius: var(--gala-radius-full); background: var(--gala-color-surface-subtle);
+  color: var(--gala-color-text); font-weight: 600;
+}
+.frame-title { font-size: var(--gala-font-size-h2); font-weight: 700; line-height: var(--gala-line-height-heading); letter-spacing: var(--gala-tracking-heading); }
+.bars { display: flex; flex-direction: column; gap: 0.625rem; }
+.bar { height: 0.625rem; border-radius: 0.25rem; background: var(--gala-color-surface-subtle); }
+.moment {
+  display: flex; flex-direction: column; gap: 0.625rem; align-items: flex-start;
+  padding: 0.875rem 1rem; border-inline-start: 3px solid var(--gala-color-accent);
+  border-radius: var(--gala-radius-md); background: var(--gala-color-accent-subtle);
+}
+.moment .bar { background: var(--gala-color-border); }
+.moment-link {
+  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem;
+  border-radius: var(--gala-radius-full); background: var(--gala-color-accent);
+  color: var(--gala-color-text-on-accent); font-size: var(--gala-font-size-small); font-weight: 650;
+}
+
+/* ---------- sections ---------- */
+.section { padding-block: 3rem; }
+.section-head { max-width: var(--gala-container-prose); }
+.eyebrow {
+  color: var(--gala-color-accent);
+  font-size: var(--gala-font-size-small);
+  font-weight: 700;
+  letter-spacing: var(--gala-tracking-label);
+  text-transform: uppercase;
+}
+h2 {
+  margin-top: 0.5rem;
+  font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.125rem);
+  line-height: var(--gala-line-height-heading);
+  letter-spacing: var(--gala-tracking-heading);
+  font-weight: 700;
+  text-wrap: balance;
+}
+.section-head p { margin-top: 0.75rem; color: var(--gala-color-text-muted); font-size: 1.0625rem; text-wrap: pretty; }
+
+.cards { display: grid; gap: 1rem; margin-top: 2rem; }
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-lg);
+  background: var(--gala-color-surface);
+  box-shadow: var(--gala-shadow-raised);
+}
+.tile {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--gala-radius-md);
+  background: var(--gala-color-accent-subtle);
+  color: var(--gala-color-accent);
+}
+.tile .icon { width: 1.375rem; height: 1.375rem; }
+.card h3 { font-size: var(--gala-font-size-h3); line-height: var(--gala-line-height-heading); letter-spacing: var(--gala-tracking-heading); font-weight: 700; }
+.card p { color: var(--gala-color-text-muted); font-size: 0.9375rem; text-wrap: pretty; }
+
+/* ---------- claim ---------- */
+.claim {
+  padding: 1.5rem;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-lg);
+  background: var(--gala-color-surface);
+  box-shadow: var(--gala-shadow-raised);
+  scroll-margin-top: 1rem;
+}
+.claim-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-md);
+  background: var(--gala-color-surface-subtle);
+}
+.option h3 { font-size: var(--gala-font-size-h3); line-height: var(--gala-line-height-heading); letter-spacing: var(--gala-tracking-heading); font-weight: 700; }
+.option p { color: var(--gala-color-text-muted); font-size: 0.9375rem; text-wrap: pretty; }
+.option strong { color: var(--gala-color-text); font-weight: 650; }
+.reply {
+  display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%;
+  padding: 0.5rem 0.875rem; border: 1px solid var(--gala-color-border);
+  border-radius: var(--gala-radius-md); background: var(--gala-color-surface);
+  color: var(--gala-color-text); font: 0.875rem/1.4 var(--gala-font-family-mono);
+}
+.reply .icon { color: var(--gala-color-accent); }
+.option .btn { margin-top: auto; }
+
+/* ---------- footer ---------- */
+.site-footer { margin-top: 3rem; border-top: 1px solid var(--gala-color-border); background: var(--gala-color-surface); }
+.site-footer .wrap { display: flex; flex-direction: column; gap: 1.25rem; padding-block: 1.75rem; }
+.footer-brand { display: inline-flex; align-items: center; gap: 0.625rem; font-weight: 700; letter-spacing: var(--gala-tracking-heading); }
+.footer-brand img { width: 1.75rem; height: 1.75rem; border-radius: var(--gala-radius-sm); box-shadow: var(--gala-mark-ring); }
+.footer-nav ul { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin-inline: -0.5rem; }
+.footer-nav a {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  min-width: 44px; min-height: 44px; padding-inline: 0.5rem;
+  border-radius: var(--gala-radius-sm); color: var(--gala-color-text-muted);
+  font-size: 0.9375rem; font-weight: 550; text-decoration: none;
+}
+.footer-nav a:hover { color: var(--gala-color-accent); text-decoration: underline; text-underline-offset: 3px; }
+.legal { color: var(--gala-color-text-muted); font-size: var(--gala-font-size-small); }
+
+/* ---------- widths ---------- */
+@media (max-width: 29.99rem) {
+  .header-link .label {
+    position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap;
+  }
+}
+@media (min-width: 30rem) {
+  .frame-body { padding: 1.5rem; }
+}
+@media (min-width: 40rem) {
+  .hero { padding-block: 3.5rem 4rem; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .claim { padding: 2rem; }
+  .claim-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .section { padding-block: 4rem; }
+}
+@media (min-width: 60rem) {
+  .hero .wrap { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 3.5rem; }
+  .hero { padding-block: 4.5rem 5rem; }
+  .site-footer .wrap { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+}
+@media (min-width: 70rem) {
+  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: transform var(--gala-duration-normal) var(--gala-easing-standard), box-shadow var(--gala-duration-normal) var(--gala-easing-standard); }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--gala-shadow-overlay); }
+}
+
+@media (forced-colors: active) {
+  .btn-primary, .moment-link { border: 1px solid ButtonText; }
+}
+</style>
 </head>
 <body>
-<h1>Galascribe demo sites</h1>
-<p>Preview sites built by Galascribe for creators. They are hidden from search engines until a creator claims their site.</p>
-<p><a href="https://galascribe.com">galascribe.com</a></p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- Icon shapes from Lucide (ISC licence), as vendored in the Galascribe App: 24 px grid, 2 px stroke, round caps. -->
+  <defs>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M7 7h4v6H7l-2 4V9a2 2 0 0 1 2-2zm8 0h4v6h-4l-2 4V9a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3l14 9-14 9V3z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="https://galascribe.com">
+      <img src="favicon.svg" width="32" height="32" alt="">
+      Galascribe
+    </a>
+    <nav aria-label="Galascribe">
+      <a class="header-link" href="https://galascribe.com">
+        <span class="label">galascribe.com</span>
+        <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <p class="pill"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-eye-off"/></svg>Kept out of search engines</p>
+        <h1 id="hero-title">Preview sites built by Galascribe for creators</h1>
+        <p class="lead">Each site turns a creator's own videos into written articles, every article linking back to the video, on a website the creator owns.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#claim">
+            Is this your preview?
+            <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-down"/></svg>
+          </a>
+          <a class="btn btn-secondary" href="https://galascribe.com">
+            About Galascribe
+            <svg class="icon icon-sm" aria-hidden="true"><use href="#i-external"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="glimpse" aria-hidden="true">
+        <div class="frame">
+          <div class="frame-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <div class="address">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-lock"/></svg>
+              <span>demo.galascribe.com/your-name/</span>
+            </div>
+          </div>
+          <div class="frame-body">
+            <div class="frame-meta">
+              <span class="chip"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-eye-off"/></svg>Preview</span>
+              <span>From a video by the creator</span>
+            </div>
+            <p class="frame-title">A video, written as an article</p>
+            <div class="bars">
+              <div class="bar" style="width:100%"></div>
+              <div class="bar" style="width:92%"></div>
+              <div class="bar" style="width:76%"></div>
+            </div>
+            <div class="moment">
+              <span class="moment-link"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-play"/></svg>Watch this part in the video</span>
+              <div class="bar" style="width:88%"></div>
+              <div class="bar" style="width:64%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How a preview works</p>
+        <h2 id="how-title">Built from the creator's videos, kept for the creator</h2>
+      </div>
+      <ul class="cards">
+        <li class="card">
+          <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></span>
+          <h3>Written from your own words</h3>
+          <p>Articles are adapted from the transcript of the creator's own videos, so the ideas and the voice are theirs.</p>
+        </li>
+        <li class="card">
+          <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          <h3>Every section links to the moment in the video</h3>
+          <p>A reader can jump from any section straight to the point in the video where it was said.</p>
+        </li>
+        <li class="card">
+          <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-eye-off"/></svg></span>
+          <h3>Hidden until claimed</h3>
+          <p>Previews are kept out of search engines, carry no ads and are not used by Galascribe in any other way.</p>
+        </li>
+        <li class="card">
+          <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg></span>
+          <h3>Yours to keep</h3>
+          <p>Claiming a preview moves the site to the creator's own GitHub account.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0" aria-labelledby="claim-title">
+    <div class="wrap">
+      <div class="claim" id="claim">
+        <div class="section-head">
+          <p class="eyebrow">For creators</p>
+          <h2 id="claim-title">Is this your preview?</h2>
+          <p>If you received an email from us, the preview made from your videos is at the address in that email.</p>
+        </div>
+        <div class="claim-grid">
+          <div class="option">
+            <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></span>
+            <h3>Make it yours</h3>
+            <p>Reply <strong>yes</strong> to the email you received, and we send you the link that makes the site yours.</p>
+            <span class="reply"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg>Reply to our email: yes</span>
+          </div>
+          <div class="option">
+            <span class="tile"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></span>
+            <h3>Take it down</h3>
+            <p>To have the preview taken down, email <strong>support@galascribe.com</strong> and it is removed.</p>
+            <a class="btn btn-secondary" href="mailto:support@galascribe.com?subject=Please%20remove%20my%20preview">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg>
+              Email support
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-brand"><img src="favicon.svg" width="28" height="28" alt="">Galascribe</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <ul>
+        <li><a href="https://galascribe.com">galascribe.com</a></li>
+        <li><a href="https://blog.galascribe.com">Blog</a></li>
+        <li><a href="https://app.galascribe.com/terms">Terms</a></li>
+        <li><a href="https://app.galascribe.com/privacy">Privacy</a></li>
+      </ul>
+    </nav>
+    <p class="legal">Rathnas LLC</p>
+  </div>
+</footer>
+
 </body>
 </html>
